@@ -1,13 +1,13 @@
 package cu.edu.cujae.transportdb.dto;
 
-public class Roadmap {
+public class RoadmapDto {
     private final String idRoadmap;
     private float initialKm;
     private float finalKm;
     private String idAssignedCar;
     private String idProgramming;
 
-    public Roadmap(String idRoadmap, float initialKm, float finalKm, String idAssignedCar, String idProgramming) {
+    public RoadmapDto(String idRoadmap, float initialKm, float finalKm, String idAssignedCar, String idProgramming) {
         this.idRoadmap = idRoadmap;
         this.initialKm = initialKm;
         this.finalKm = finalKm;

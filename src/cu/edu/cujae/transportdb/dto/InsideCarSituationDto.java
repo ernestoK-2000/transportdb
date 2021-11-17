@@ -2,12 +2,12 @@ package cu.edu.cujae.transportdb.dto;
 
 import java.util.Calendar;
 
-public class InsideDriverSituation extends DriverSituation{
+public class InsideCarSituationDto extends CarSituationDto {
 
     private Calendar returnDate;
 
-    public InsideDriverSituation(String idDriverSituation, Calendar date, String idDriverSituationType, String idDriver, Calendar returnDate) {
-        super(idDriverSituation, date, idDriverSituationType, idDriver);
+    public InsideCarSituationDto(String idCarSituation, Calendar date, String idCarSituationType, String idCar, Calendar returnDate) {
+        super(idCarSituation, date, idCarSituationType, idCar);
         this.returnDate = returnDate;
     }
 

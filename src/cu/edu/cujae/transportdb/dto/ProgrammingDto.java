@@ -2,14 +2,14 @@ package cu.edu.cujae.transportdb.dto;
 
 import java.util.Calendar;
 
-public class Programming {
+public class ProgrammingDto {
     private Calendar startTime;
     private Calendar endTime;
     private String pickUpPlace;
     private final String idProgramming;
     private String idProgrammingType;
 
-    public Programming(Calendar startTime, Calendar endTime, String pickUpPlace, String idProgramming, String idProgrammingType) {
+    public ProgrammingDto(Calendar startTime, Calendar endTime, String pickUpPlace, String idProgramming, String idProgrammingType) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.pickUpPlace = pickUpPlace;

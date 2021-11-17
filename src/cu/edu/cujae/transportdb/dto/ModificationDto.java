@@ -2,14 +2,14 @@ package cu.edu.cujae.transportdb.dto;
 
 import java.util.Calendar;
 
-public class Modification {
+public class ModificationDto {
     private final String idModification;
     private Calendar date;
     private Object newValue;
     private String idModificationType;
     private String idGroups;
 
-    public Modification(String idModification, Calendar date, Object newValue, String idModificationType, String idGroups) {
+    public ModificationDto(String idModification, Calendar date, Object newValue, String idModificationType, String idGroups) {
         this.idModification = idModification;
         this.date = date;
         this.newValue = newValue;

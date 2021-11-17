@@ -1,10 +1,10 @@
 package cu.edu.cujae.transportdb.dto;
 
-public class CarBrand {
+public class CarBrandDto {
     private final String idBrand;
     private String brand;
 
-    public CarBrand(String idBrand, String brand) {
+    public CarBrandDto(String idBrand, String brand) {
         this.idBrand = idBrand;
         this.brand = brand;
     }

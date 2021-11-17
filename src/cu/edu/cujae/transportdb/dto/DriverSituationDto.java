@@ -2,13 +2,13 @@ package cu.edu.cujae.transportdb.dto;
 
 import java.util.Calendar;
 
-public class DriverSituation {
+public class DriverSituationDto {
     private final String idDriverSituation;
     private Calendar date;
     private String idDriverSituationType;
     private String idDriver;
 
-    public DriverSituation(String idDriverSituation, Calendar date, String idDriverSituationType, String idDriver) {
+    public DriverSituationDto(String idDriverSituation, Calendar date, String idDriverSituationType, String idDriver) {
         this.idDriverSituation = idDriverSituation;
         this.date = date;
         this.idDriverSituationType = idDriverSituationType;

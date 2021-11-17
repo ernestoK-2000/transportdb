@@ -1,12 +1,12 @@
 package cu.edu.cujae.transportdb.dto;
 
-public class Driver {
+public class DriverDto {
     private final String idDriver;
     private String driverName;
     private String driver_surname;
     private String idCategory;
 
-    public Driver(String idDriver, String driverName, String driver_surname, String idCategory) {
+    public DriverDto(String idDriver, String driverName, String driver_surname, String idCategory) {
         this.idDriver = idDriver;
         this.driverName = driverName;
         this.driver_surname = driver_surname;

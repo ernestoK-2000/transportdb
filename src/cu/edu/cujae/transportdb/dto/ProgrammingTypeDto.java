@@ -2,13 +2,13 @@ package cu.edu.cujae.transportdb.dto;
 
 import java.util.Calendar;
 
-public class ProgrammingType {
+public class ProgrammingTypeDto {
     private final String idProgrammingType;
     private String programmingType;
     private Calendar delayTime;
     private float kmToTravel;
 
-    public ProgrammingType(String idProgrammingType, String programmingType, Calendar delayTime, float kmToTravel) {
+    public ProgrammingTypeDto(String idProgrammingType, String programmingType, Calendar delayTime, float kmToTravel) {
         this.idProgrammingType = idProgrammingType;
         this.programmingType = programmingType;
         this.delayTime = delayTime;

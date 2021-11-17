@@ -1,10 +1,10 @@
 package cu.edu.cujae.transportdb.dto;
 
-public class DriverSituationType {
+public class DriverSituationTypeDto {
     private String driverSituationType;
     private final String idDriverSituationType;
 
-    public DriverSituationType(String driverSituationType, String idDriverSituationType) {
+    public DriverSituationTypeDto(String driverSituationType, String idDriverSituationType) {
         this.driverSituationType = driverSituationType;
         this.idDriverSituationType = idDriverSituationType;
     }

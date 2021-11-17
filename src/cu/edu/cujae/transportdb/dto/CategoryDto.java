@@ -1,10 +1,10 @@
 package cu.edu.cujae.transportdb.dto;
 
-public class Category {
+public class CategoryDto {
     private final String idCategory;
     private String category;
 
-    public Category(String idCategory, String category) {
+    public CategoryDto(String idCategory, String category) {
         this.idCategory = idCategory;
         this.category = category;
     }

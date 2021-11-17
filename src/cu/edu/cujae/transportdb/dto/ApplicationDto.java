@@ -1,11 +1,11 @@
 package cu.edu.cujae.transportdb.dto;
 
-public class Application {
+public class ApplicationDto {
     private final String idApplication;
     private boolean accepted;
     private String idGroups;
 
-    public Application(String idApplication, boolean accepted, String idGroups) {
+    public ApplicationDto(String idApplication, boolean accepted, String idGroups) {
         this.idApplication = idApplication;
         this.accepted = accepted;
         this.idGroups = idGroups;
