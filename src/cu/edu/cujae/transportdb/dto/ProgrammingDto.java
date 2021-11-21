@@ -1,35 +1,40 @@
 package cu.edu.cujae.transportdb.dto;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class ProgrammingDto {
-    private Calendar startTime;
-    private Calendar endTime;
+    private Date startTime;
+    private Date endTime;
     private String pickUpPlace;
-    private final String idProgramming;
-    private String idProgrammingType;
+    private final int idProgramming;
+    private int idProgrammingType;
+    private int idApplication;
+    private int idModification;
 
-    public ProgrammingDto(Calendar startTime, Calendar endTime, String pickUpPlace, String idProgramming, String idProgrammingType) {
+    public ProgrammingDto(Date startTime, Date endTime, String pickUpPlace, int idProgramming, int idProgrammingType, int idApplication, int idModification) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.pickUpPlace = pickUpPlace;
         this.idProgramming = idProgramming;
         this.idProgrammingType = idProgrammingType;
+        this.idApplication = idApplication;
+        this.idModification = idModification;
     }
 
-    public Calendar getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Calendar startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public Calendar getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Calendar endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
@@ -41,15 +46,31 @@ public class ProgrammingDto {
         this.pickUpPlace = pickUpPlace;
     }
 
-    public String getIdProgramming() {
+    public int getIdProgramming() {
         return idProgramming;
     }
 
-    public String getIdProgrammingType() {
+    public int getIdProgrammingType() {
         return idProgrammingType;
     }
 
-    public void setIdProgrammingType(String idProgrammingType) {
+    public void setIdProgrammingType(int idProgrammingType) {
         this.idProgrammingType = idProgrammingType;
+    }
+
+    public int getIdApplication() {
+        return idApplication;
+    }
+
+    public void setIdApplication(int idApplication) {
+        this.idApplication = idApplication;
+    }
+
+    public int getIdModification() {
+        return idModification;
+    }
+
+    public void setIdModification(int idModification) {
+        this.idModification = idModification;
     }
 }

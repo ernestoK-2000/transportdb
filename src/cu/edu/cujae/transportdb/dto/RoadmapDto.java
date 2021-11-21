@@ -1,13 +1,13 @@
 package cu.edu.cujae.transportdb.dto;
 
 public class RoadmapDto {
-    private final String idRoadmap;
+    private final int idRoadmap;
     private float initialKm;
     private float finalKm;
-    private String idAssignedCar;
-    private String idProgramming;
+    private int idAssignedCar;
+    private int idProgramming;
 
-    public RoadmapDto(String idRoadmap, float initialKm, float finalKm, String idAssignedCar, String idProgramming) {
+    public RoadmapDto(int idRoadmap, float initialKm, float finalKm, int idAssignedCar, int idProgramming) {
         this.idRoadmap = idRoadmap;
         this.initialKm = initialKm;
         this.finalKm = finalKm;
@@ -15,7 +15,7 @@ public class RoadmapDto {
         this.idProgramming = idProgramming;
     }
 
-    public String getIdRoadmap() {
+    public int getIdRoadmap() {
         return idRoadmap;
     }
 
@@ -35,19 +35,19 @@ public class RoadmapDto {
         this.finalKm = finalKm;
     }
 
-    public String getIdAssignedCar() {
+    public int getIdAssignedCar() {
         return idAssignedCar;
     }
 
-    public void setIdAssignedCar(String idAssignedCar) {
+    public void setIdAssignedCar(int idAssignedCar) {
         this.idAssignedCar = idAssignedCar;
     }
 
-    public String getIdProgramming() {
+    public int getIdProgramming() {
         return idProgramming;
     }
 
-    public void setIdProgramming(String idProgramming) {
+    public void setIdProgramming(int idProgramming) {
         this.idProgramming = idProgramming;
     }
 }

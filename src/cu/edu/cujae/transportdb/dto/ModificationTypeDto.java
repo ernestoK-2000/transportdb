@@ -1,15 +1,15 @@
 package cu.edu.cujae.transportdb.dto;
 
 public class ModificationTypeDto {
-    private final String idModificationType;
+    private final int idModificationType;
     private String modification;
 
-    public ModificationTypeDto(String idModificationType, String modification) {
+    public ModificationTypeDto(int idModificationType, String modification) {
         this.idModificationType = idModificationType;
         this.modification = modification;
     }
 
-    public String getIdModificationType() {
+    public int getIdModificationType() {
         return idModificationType;
     }
 

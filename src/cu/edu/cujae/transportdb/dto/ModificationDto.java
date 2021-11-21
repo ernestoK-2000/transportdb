@@ -1,15 +1,16 @@
 package cu.edu.cujae.transportdb.dto;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class ModificationDto {
-    private final String idModification;
-    private Calendar date;
+    private final int idModification;
+    private Date date;
     private Object newValue;
-    private String idModificationType;
-    private String idGroups;
+    private int idModificationType;
+    private int idGroups;
 
-    public ModificationDto(String idModification, Calendar date, Object newValue, String idModificationType, String idGroups) {
+    public ModificationDto(int idModification, Date date, Object newValue, int idModificationType, int idGroups) {
         this.idModification = idModification;
         this.date = date;
         this.newValue = newValue;
@@ -17,15 +18,15 @@ public class ModificationDto {
         this.idGroups = idGroups;
     }
 
-    public String getIdModification() {
+    public int getIdModification() {
         return idModification;
     }
 
-    public Calendar getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -37,19 +38,19 @@ public class ModificationDto {
         this.newValue = newValue;
     }
 
-    public String getIdModificationType() {
+    public int getIdModificationType() {
         return idModificationType;
     }
 
-    public void setIdModificationType(String idModificationType) {
+    public void setIdModificationType(int idModificationType) {
         this.idModificationType = idModificationType;
     }
 
-    public String getIdGroups() {
+    public int getIdGroups() {
         return idGroups;
     }
 
-    public void setIdGroups(String idGroups) {
+    public void setIdGroups(int idGroups) {
         this.idGroups = idGroups;
     }
 }

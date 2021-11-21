@@ -1,45 +1,46 @@
 package cu.edu.cujae.transportdb.dto;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class DriverSituationDto {
-    private final String idDriverSituation;
-    private Calendar date;
-    private String idDriverSituationType;
-    private String idDriver;
+    private final int idDriverSituation;
+    private Date date;
+    private int idDriverSituationType;
+    private int idDriver;
 
-    public DriverSituationDto(String idDriverSituation, Calendar date, String idDriverSituationType, String idDriver) {
+    public DriverSituationDto(int idDriverSituation, Date date, int idDriverSituationType, int idDriver) {
         this.idDriverSituation = idDriverSituation;
         this.date = date;
         this.idDriverSituationType = idDriverSituationType;
         this.idDriver = idDriver;
     }
 
-    public String getIdDriverSituation() {
+    public int getIdDriverSituation() {
         return idDriverSituation;
     }
 
-    public Calendar getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getIdDriverSituationType() {
+    public int getIdDriverSituationType() {
         return idDriverSituationType;
     }
 
-    public void setIdDriverSituationType(String idDriverSituationType) {
+    public void setIdDriverSituationType(int idDriverSituationType) {
         this.idDriverSituationType = idDriverSituationType;
     }
 
-    public String getIdDriver() {
+    public int getIdDriver() {
         return idDriver;
     }
 
-    public void setIdDriver(String idDriver) {
+    public void setIdDriver(int idDriver) {
         this.idDriver = idDriver;
     }
 }

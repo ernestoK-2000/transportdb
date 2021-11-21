@@ -1,17 +1,17 @@
 package cu.edu.cujae.transportdb.dto;
 
 public class GroupsDto {
-    private final String idGroups;
+    private final int idGroups;
     private int amountOfPeople;
-    private String idCountry;
+    private int idCountry;
 
-    public GroupsDto(String idGroups, int amountOfPeople, String idCountry) {
+    public GroupsDto(int idGroups, int amountOfPeople, int idCountry) {
         this.idGroups = idGroups;
         this.amountOfPeople = amountOfPeople;
         this.idCountry = idCountry;
     }
 
-    public String getIdGroups() {
+    public int getIdGroups() {
         return idGroups;
     }
 
@@ -23,11 +23,11 @@ public class GroupsDto {
         this.amountOfPeople = amountOfPeople;
     }
 
-    public String getIdCountry() {
+    public int getIdCountry() {
         return idCountry;
     }
 
-    public void setIdCountry(String idCountry) {
+    public void setIdCountry(int idCountry) {
         this.idCountry = idCountry;
     }
 }

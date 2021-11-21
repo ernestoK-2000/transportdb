@@ -1,13 +1,13 @@
 package cu.edu.cujae.transportdb.dto;
 
-public class CarDto {
-    private final String idCar;
+public class CarDto extends Dto{
+    private final int idCar;
     private String carNumber;
     private String carBrand;
     private int carSeats;
     private float kmAvailable;
 
-    public CarDto(String idCar, String carNumber, String carBrand, int carSeats, float kmAvailable) {
+    public CarDto(int idCar, String carNumber, String carBrand, int carSeats, float kmAvailable) {
         this.idCar = idCar;
         this.carNumber = carNumber;
         this.carBrand = carBrand;
@@ -19,7 +19,7 @@ public class CarDto {
         return carNumber;
     }
 
-    public String getIdCar() {
+    public int getIdCar() {
         return idCar;
     }
 

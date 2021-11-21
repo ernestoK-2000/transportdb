@@ -1,19 +1,23 @@
 package cu.edu.cujae.transportdb.dto;
 
 public class DriverDto {
-    private final String idDriver;
+    private final int idDriver;
     private String driverName;
-    private String driver_surname;
-    private String idCategory;
+    private String driverSurname;
+    private int idCategory;
+    private String driverAddress;
+    private String dni;
 
-    public DriverDto(String idDriver, String driverName, String driver_surname, String idCategory) {
+    public DriverDto(int idDriver, String dni, String driverName, String driverSurname, String driverAddress, int idCategory) {
         this.idDriver = idDriver;
+        this.dni = dni;
         this.driverName = driverName;
-        this.driver_surname = driver_surname;
+        this.driverSurname = driverSurname;
+        this.driverAddress = driverAddress;
         this.idCategory = idCategory;
     }
 
-    public String getIdDriver() {
+    public int getIdDriver() {
         return idDriver;
     }
 
@@ -25,19 +29,35 @@ public class DriverDto {
         this.driverName = driverName;
     }
 
-    public String getDriver_surname() {
-        return driver_surname;
+    public String getDriverSurname() {
+        return driverSurname;
     }
 
-    public void setDriver_surname(String driver_surname) {
-        this.driver_surname = driver_surname;
+    public void setDriverSurname(String driverSurname) {
+        this.driverSurname = driverSurname;
     }
 
-    public String getIdCategory() {
+    public int getIdCategory() {
         return idCategory;
     }
 
-    public void setIdCategory(String idCategory) {
+    public void setIdCategory(int idCategory) {
         this.idCategory = idCategory;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public String getDriverAddress() {
+        return driverAddress;
+    }
+
+    public void setDriverAddress(String driverAddress) {
+        this.driverAddress = driverAddress;
     }
 }

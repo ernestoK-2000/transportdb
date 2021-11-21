@@ -1,45 +1,46 @@
 package cu.edu.cujae.transportdb.dto;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class CarSituationDto {
-    private final String idCarSituation;
-    private Calendar date;
-    private String idCarSituationType;
-    private String idCar;
+    private final int idCarSituation;
+    private Date date;
+    private int idCarSituationType;
+    private int idCar;
 
-    public CarSituationDto(String idCarSituation, Calendar date, String idCarSituationType, String idCar) {
+    public CarSituationDto(int idCarSituation, Date date, int idCarSituationType, int idCar) {
         this.date = date;
         this.idCarSituationType = idCarSituationType;
         this.idCar = idCar;
         this.idCarSituation = idCarSituation;
     }
 
-    public Calendar getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public String getIdCarSituation() {
+    public int getIdCarSituation() {
         return idCarSituation;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getIdCarSituationType() {
+    public int getIdCarSituationType() {
         return idCarSituationType;
     }
 
-    public void setIdCarSituationType(String idCarSituationType) {
+    public void setIdCarSituationType(int idCarSituationType) {
         this.idCarSituationType = idCarSituationType;
     }
 
-    public String getIdCar() {
+    public int getIdCar() {
         return idCar;
     }
 
-    public void setIdCar(String idCar) {
+    public void setIdCar(int idCar) {
         this.idCar = idCar;
     }
 }

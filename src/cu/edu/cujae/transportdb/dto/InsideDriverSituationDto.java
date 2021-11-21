@@ -1,21 +1,37 @@
 package cu.edu.cujae.transportdb.dto;
 
 import java.util.Calendar;
+import java.util.Date;
 
-public class InsideDriverSituationDto extends DriverSituationDto {
+public class InsideDriverSituationDto {
 
-    private Calendar returnDate;
+    private Date date;
+    private Date returnDate;
+    private final int idDriverSituation;
 
-    public InsideDriverSituationDto(String idDriverSituation, Calendar date, String idDriverSituationType, String idDriver, Calendar returnDate) {
-        super(idDriverSituation, date, idDriverSituationType, idDriver);
+    public InsideDriverSituationDto(int idDriverSituation, Date returnDate, Date date) {
         this.returnDate = returnDate;
+        this.idDriverSituation = idDriverSituation;
+        this.date = date;
     }
 
-    public Calendar getReturnDate() {
+    public Date getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(Calendar returnDate) {
+    public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public int getIdDriverSituation() {
+        return idDriverSituation;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

@@ -1,17 +1,21 @@
 package cu.edu.cujae.transportdb.dto;
 
-public class ApplicationDto {
-    private final String idApplication;
-    private boolean accepted;
-    private String idGroups;
+import java.util.Date;
 
-    public ApplicationDto(String idApplication, boolean accepted, String idGroups) {
+public class ApplicationDto {
+    private final int idApplication;
+    private boolean accepted;
+    private int idGroups;
+    private Date date;
+
+    public ApplicationDto(int idApplication, boolean accepted, Date date, int idGroups) {
         this.idApplication = idApplication;
         this.accepted = accepted;
         this.idGroups = idGroups;
+        this.date = date;
     }
 
-    public String getIdApplication() {
+    public int getIdApplication() {
         return idApplication;
     }
 
@@ -23,11 +27,19 @@ public class ApplicationDto {
         this.accepted = accepted;
     }
 
-    public String getIdGroups() {
+    public int getIdGroups() {
         return idGroups;
     }
 
-    public void setIdGroups(String idGroups) {
+    public void setIdGroups(int idGroups) {
         this.idGroups = idGroups;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

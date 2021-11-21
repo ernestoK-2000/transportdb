@@ -1,15 +1,15 @@
 package cu.edu.cujae.transportdb.dto;
 
 public class CountryDto {
-    private final String idCountry;
+    private final int idCountry;
     private String country;
 
-    public CountryDto(String idCountry, String country) {
+    public CountryDto(int idCountry, String country) {
         this.idCountry = idCountry;
         this.country = country;
     }
 
-    public String getIdCountry() {
+    public int getIdCountry() {
         return idCountry;
     }
 
