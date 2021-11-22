@@ -67,6 +67,7 @@ public class TablaConductor extends JDialog {
 		setTitle("Conductores");
 		setBounds(100, 100, 722, 480);
 		getContentPane().setLayout(null);
+		setModal(true);
 		
 		table = new JTable();
 		final DefaultTableModel model = new DefaultTableModel();

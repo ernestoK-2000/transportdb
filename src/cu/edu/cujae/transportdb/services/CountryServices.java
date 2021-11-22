@@ -4,6 +4,7 @@ import cu.edu.cujae.transportdb.dto.CategoryDto;
 import cu.edu.cujae.transportdb.dto.CountryDto;
 
 import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -46,5 +47,16 @@ public class CountryServices extends AbstractServices<CountryDto> {
 
         preparedFunction.close();
         connection.close();
+    }
+
+    public int getIdCountry(String country) throws SQLException{
+        java.sql.Connection connection = ServicesLocator.getConnection();
+        String sql = "select id_country from country where country = ?";
+        PreparedStatement statement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        statement.setString(1, country);
+        statement.execute();
+        ResultSet result = statement.getResultSet();
+        result.first();
+        return result.getInt(1);
     }
 }

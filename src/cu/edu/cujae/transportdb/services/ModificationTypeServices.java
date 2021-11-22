@@ -4,6 +4,7 @@ import cu.edu.cujae.transportdb.dto.CountryDto;
 import cu.edu.cujae.transportdb.dto.ModificationTypeDto;
 
 import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -46,5 +47,16 @@ public class ModificationTypeServices extends AbstractServices<ModificationTypeD
 
         preparedFunction.close();
         connection.close();
+    }
+
+    public int getIdModificationType(String modificationType) throws SQLException{
+        java.sql.Connection connection = ServicesLocator.getConnection();
+        String sql = "select id_modification_type from modification_type where modification_type = ?";
+        PreparedStatement statement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        statement.setString(1, modificationType);
+        statement.execute();
+        ResultSet result = statement.getResultSet();
+        result.first();
+        return result.getInt(1);
     }
 }

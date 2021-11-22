@@ -61,6 +61,7 @@ public class TablaCarroAsignado extends JDialog {
 	public TablaCarroAsignado() {
 		setTitle("Carro Asignado");
 		setBounds(100, 100, 665, 445);
+		setModal(true);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("649px:grow"),},
 			new RowSpec[] {

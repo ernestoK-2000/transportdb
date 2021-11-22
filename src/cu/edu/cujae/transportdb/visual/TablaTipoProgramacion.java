@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Calendar;
 
 import javax.swing.GroupLayout;
@@ -28,12 +29,18 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
+import cu.edu.cujae.transportdb.dto.GroupsDto;
+import cu.edu.cujae.transportdb.dto.ProgrammingTypeDto;
+import cu.edu.cujae.transportdb.services.ProgrammingTypeServices;
+import cu.edu.cujae.transportdb.services.ServicesLocator;
+
 import javax.swing.JComboBox;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.util.LinkedList;
 
 public class TablaTipoProgramacion extends JDialog {
 	boolean x = false;
@@ -42,12 +49,16 @@ public class TablaTipoProgramacion extends JDialog {
 	private JScrollPane scrollPane;
 
 
+	private ProgrammingTypeServices pts = ServicesLocator.getProgrammingTypeServices();
+	private Object[] row= new Object[6];
+	private DefaultTableModel model = new DefaultTableModel();
 
 	/**
 	 * Create the dialog.
 	 */
 	public TablaTipoProgramacion() {
 		setTitle("Tipos de Programaciones");
+		setModal(true);
 		setBounds(100, 100, 665, 445);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("649px:grow"),},
@@ -55,8 +66,7 @@ public class TablaTipoProgramacion extends JDialog {
 				RowSpec.decode("2px"),
 				RowSpec.decode("358px:grow"),
 				RowSpec.decode("41px:grow"),}));
-		final Object[] row= new Object[6];
-		final DefaultTableModel model = new DefaultTableModel();
+
 		{
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, "1, 2, fill, fill");
@@ -119,8 +129,24 @@ public class TablaTipoProgramacion extends JDialog {
 			buttonPane.setLayout(gl_buttonPane);
 		}
 		
-		
+		loadData();
 	}
+
+	private void loadData(){
+		try {
+			LinkedList<ProgrammingTypeDto> groups = pts.getAllInfo();
+			for (ProgrammingTypeDto pt :
+					groups) {
+				row[0] = pt.getIdProgrammingType();
+				row[1] = pt.getProgrammingType();
+				model.addRow(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 }
 
 

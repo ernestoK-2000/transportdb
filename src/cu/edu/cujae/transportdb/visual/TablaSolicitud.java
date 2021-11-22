@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Calendar;
 
 import javax.swing.GroupLayout;
@@ -28,12 +29,20 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
+import cu.edu.cujae.transportdb.dto.ApplicationDto;
+import cu.edu.cujae.transportdb.dto.CountryDto;
+import cu.edu.cujae.transportdb.dto.GroupsDto;
+import cu.edu.cujae.transportdb.services.ApplicationServices;
+import cu.edu.cujae.transportdb.services.ServicesLocator;
+
 import javax.swing.JComboBox;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class TablaSolicitud extends JDialog {
 	boolean x = false;
@@ -48,21 +57,31 @@ public class TablaSolicitud extends JDialog {
 	private JScrollPane scrollPane;
 	private JCheckBox chckbxNewCheckBox;
 
+	private final Object[] row= new Object[6];
+	private final DefaultTableModel model = new DefaultTableModel();
+
+	private ApplicationServices as = ServicesLocator.getApplicationServices();
+	private LinkedList<ApplicationDto> applications;
 
 	/**
 	 * Create the dialog.
 	 */
 	public TablaSolicitud() {
+		try {
+			applications = as.getAllInfo();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		setTitle("Solicitudes");
 		setBounds(100, 100, 665, 445);
+		setModal(true);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("649px:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("38px:grow"),
 				RowSpec.decode("297px:grow"),
 				RowSpec.decode("41px:grow"),}));
-		final Object[] row= new Object[6];
-		final DefaultTableModel model = new DefaultTableModel();
+
 		{
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, "1, 2, fill, fill");
@@ -247,7 +266,17 @@ public class TablaSolicitud extends JDialog {
 			);
 			buttonPane.setLayout(gl_buttonPane);
 		}
-		
-		
+		loadData();
+	}
+
+	private void loadData() {
+		for (ApplicationDto a :
+				applications) {
+			row[0] = a.getDate();
+			row[1] = a.isAccepted() ? "Aceptada" : "Denegada";
+			row[2] = a.getIdGroups();
+
+			model.addRow(row);
+		}
 	}
 }

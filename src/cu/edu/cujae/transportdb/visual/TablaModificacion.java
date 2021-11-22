@@ -1,15 +1,16 @@
 package cu.edu.cujae.transportdb.visual;
 
-import java.awt.BorderLayout;
-
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -30,8 +31,14 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
+import cu.edu.cujae.transportdb.dto.GroupsDto;
+import cu.edu.cujae.transportdb.dto.ModificationDto;
+import cu.edu.cujae.transportdb.dto.ModificationTypeDto;
+import cu.edu.cujae.transportdb.services.ModificationServices;
+import cu.edu.cujae.transportdb.services.ModificationTypeServices;
+import cu.edu.cujae.transportdb.services.ServicesLocator;
+
 import javax.swing.JComboBox;
-import javax.swing.SpinnerNumberModel;
 
 public class TablaModificacion extends JDialog {
 	private JButton btnNewButton;
@@ -47,27 +54,37 @@ public class TablaModificacion extends JDialog {
 	private JLabel lblNewLabel;
 	private JTextField textField;
 
-
+	private final Object[] row= new Object[6];
+	private final DefaultTableModel model = new DefaultTableModel();
+	private ModificationServices ms = ServicesLocator.getModificationServices();
+	private LinkedList<ModificationDto> modifications;
+	private LinkedList<ModificationTypeDto> modificationTypes;
+	private ModificationTypeServices mts = ServicesLocator.getModificationTypeServices();
 
 	/**
 	 * Create the dialog.
 	 */
 	public TablaModificacion() {
+		try {
+			modifications = ms.getAllInfo();
+			modificationTypes = mts.getAllInfo();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		setTitle("Modificacion del Grupo");
 		setBounds(100, 100, 665, 445);
+		setModal(true);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("649px:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("66px:grow"),
 				RowSpec.decode("297px:grow"),
 				RowSpec.decode("41px:grow"),}));
-		final Object[] row= new Object[6];
-		final DefaultTableModel model = new DefaultTableModel();
+
 		{
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, "1, 2, fill, fill");
 			panel.setLayout(new GridLayout(1, 0, 0, 0));
-			
 			{
 				scrollPane = new JScrollPane();
 				scrollPane.setForeground(Color.RED);
@@ -156,12 +173,10 @@ public class TablaModificacion extends JDialog {
 			{
 				comboBox = new JComboBox();
 				comboBox.addItem("Ninguno");
-				comboBox.addItem("Cuba");
-				comboBox.addItem("Brasil");
-				comboBox.addItem("Aegentina");
-				comboBox.addItem("Venezuela");
-				comboBox.addItem("Nicaragua");
-				comboBox.addItem("Uruguay");
+				for (ModificationTypeDto mt :
+						modificationTypes) {
+					comboBox.addItem(mt.getModification());
+				}
 				panel.add(comboBox, "10, 2, fill, default");
 			}
 			{
@@ -186,10 +201,7 @@ public class TablaModificacion extends JDialog {
 					public void actionPerformed(ActionEvent arg0) {
 						if(!(comboBox.getSelectedItem().toString() == ("Ninguno"))){
 							if(!(textField.getText().toString().equals(""))){
-									row[0] = spinner.getValue();
-									row[1] = comboBox.getSelectedItem().toString();
-									row[2] = textField.getText().toString();
-									model.addRow(row);
+									insertData();
 								}else JOptionPane.showMessageDialog(null, "Error. Por favor ingrese un valor correcto ");
 							}else JOptionPane.showMessageDialog(null, "Error. Por favor elija un tipo de modificacion ");
 					
@@ -204,9 +216,7 @@ public class TablaModificacion extends JDialog {
 						if(a>=0){
 							if(!(comboBox.getSelectedItem().toString() == ("Ninguno"))){
 								if(!(textField.getText().toString().equals(""))){
-										model.setValueAt(spinner.getValue(), a, 0);
-										model.setValueAt(comboBox.getSelectedItem().toString(), a, 1);
-										model.setValueAt(textField.getText().toString(), a, 2);
+										updateData(a);
 								}else JOptionPane.showMessageDialog(null, "Error. Por favor ingrese un valor correcto ");
 							}else JOptionPane.showMessageDialog(null, "Error. Por favor elija un tipo de modificacion ");		
 						}else JOptionPane.showMessageDialog(null, "Error. Seleccione una fila");
@@ -215,12 +225,12 @@ public class TablaModificacion extends JDialog {
 				});
 			}
 			{
-				btnNewButton_2 = new JButton("Elimiar");
+				btnNewButton_2 = new JButton("Eliminar");
 				btnNewButton_2.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						int a = table.getSelectedRow();
 						if(a>=0)
-							model.removeRow(a);
+							deleteData(a);
 						else
 							JOptionPane.showMessageDialog(null, "Error al Eliminar, por favor elija una fila");
 					}
@@ -260,7 +270,128 @@ public class TablaModificacion extends JDialog {
 			);
 			buttonPane.setLayout(gl_buttonPane);
 		}
-		
-		
+		loadData();
+	}
+
+	private void loadData() {
+		for (ModificationDto m :
+				modifications) {
+			row[0] = m.getDate();
+			row[2] = m.getNewValue();
+			row[3] = m.getIdGroups();
+
+			//find modification by modificationId
+			boolean found = false;
+			Iterator<ModificationTypeDto> iter = modificationTypes.iterator();
+			while (iter.hasNext() && !found) {
+				ModificationTypeDto mt = iter.next();
+				if (m.getIdModificationType() == mt.getIdModificationType()) {
+					found = true;
+					row[1] = mt.getModification();
+				}
+			}
+			model.addRow(row);
+		}
+	}
+
+	private void insertData() {
+		//get insert info
+		Date dateAfter = new Date(((java.util.Date)spinner.getValue()).getTime());
+		String modificationType = comboBox.getSelectedItem().toString();
+		String newValue = textField.getText().toString();
+		int idGroups = 1;
+
+		//insert gui
+		row[0] = dateAfter;
+		row[1] = modificationType;
+		row[2] = newValue;
+		row[3] = idGroups;
+		model.addRow(row);
+
+
+		try {
+			//get idModificationType
+			int idModificationType = mts.getIdModificationType(modificationType);
+
+			//insert db
+			ms.insertModification(new ModificationDto(0, dateAfter, newValue, idModificationType, idGroups));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void updateData(int rowNumber){
+		try{
+			//get current info
+			Date dateBefore = new Date(((java.util.Date)model.getValueAt(rowNumber,0)).getTime());
+			String modificationTypeBefore = model.getValueAt(rowNumber, 1).toString();
+			String newValueBefore = model.getValueAt(rowNumber, 2).toString();
+			int idGroupsBefore = (int) model.getValueAt(rowNumber, 3);
+
+			//get modification info
+			Date dateAfter = new Date(((java.util.Date)spinner.getValue()).getTime());
+			String modificationTypeAfter = comboBox.getSelectedItem().toString();
+			String newValueAfter = textField.getText().toString();
+			int idGroupsAfter = 1;
+
+			//change info in gui
+			model.setValueAt(dateAfter, rowNumber, 0);
+			model.setValueAt(modificationTypeAfter, rowNumber, 1);
+			model.setValueAt(newValueAfter, rowNumber, 2);
+			model.setValueAt(idGroupsAfter, rowNumber, 3);
+
+			//change info in bd
+            /*
+            Info needed:
+            - idModification
+            - dateAfter
+            - newValueAfter
+            - idModificationTypeAfter
+            - idGroupsAfter
+             */
+
+			//Find idModificationTypeAfter
+			int idModificationTypeAfter = mts.getIdModificationType(modificationTypeAfter);
+
+			//Find idModification
+            /*
+            Info needed:
+            - dateBefore
+            - newValueBefore
+            - idModificationTypeBefore
+            - idGroupsBefore
+             */
+
+			//Find idModificationTypeBefore
+			int idModificationTypeBefore = mts.getIdModificationType(modificationTypeBefore);
+			int idModification = ms.getIdModification(dateBefore, newValueBefore, idModificationTypeBefore, idGroupsBefore);
+
+			System.out.println(idModification);
+			System.out.println(dateAfter);
+			System.out.println(newValueAfter);
+			System.out.println(idModificationTypeAfter);
+			ms.updateModification(new ModificationDto(idModification, dateAfter, newValueAfter, idModificationTypeAfter, idGroupsAfter));
+
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteData(int rowNumber){
+		//get current info
+		Date dateBefore = new Date(((java.util.Date)model.getValueAt(rowNumber,0)).getTime());
+		String modificationTypeBefore = model.getValueAt(rowNumber, 1).toString();
+		String newValueBefore = model.getValueAt(rowNumber, 2).toString();
+		int idGroupsBefore = (int) model.getValueAt(rowNumber, 3);
+
+		//delete from gui
+		model.removeRow(rowNumber);
+
+		//delete from db
+		try{
+			ms.deleteRegister(ms.getIdModification(dateBefore, newValueBefore, mts.getIdModificationType(modificationTypeBefore), idGroupsBefore));
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
 	}
 }

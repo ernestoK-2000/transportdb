@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Calendar;
 
 import javax.swing.GroupLayout;
@@ -28,12 +29,18 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
+import cu.edu.cujae.transportdb.dto.ModificationTypeDto;
+import cu.edu.cujae.transportdb.dto.ProgrammingTypeDto;
+import cu.edu.cujae.transportdb.services.ModificationTypeServices;
+import cu.edu.cujae.transportdb.services.ServicesLocator;
+
 import javax.swing.JComboBox;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.util.LinkedList;
 
 public class TablaTipoModificacion extends JDialog {
 	boolean x = false;
@@ -41,13 +48,16 @@ public class TablaTipoModificacion extends JDialog {
 	private JTable table;
 	private JScrollPane scrollPane;
 
-
+	private final Object[] row= new Object[6];
+	private final DefaultTableModel model = new DefaultTableModel();
+	private ModificationTypeServices mts = ServicesLocator.getModificationTypeServices();
 
 	/**
 	 * Create the dialog.
 	 */
 	public TablaTipoModificacion() {
 		setTitle("Tipo de Modificacion");
+		setModal(true);
 		setBounds(100, 100, 665, 445);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("649px:grow"),},
@@ -55,8 +65,7 @@ public class TablaTipoModificacion extends JDialog {
 				RowSpec.decode("2px"),
 				RowSpec.decode("358px:grow"),
 				RowSpec.decode("41px:grow"),}));
-		final Object[] row= new Object[6];
-		final DefaultTableModel model = new DefaultTableModel();
+
 		{
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, "1, 2, fill, fill");
@@ -119,7 +128,21 @@ public class TablaTipoModificacion extends JDialog {
 			buttonPane.setLayout(gl_buttonPane);
 		}
 		
-		
+		loadData();
+	}
+
+	private void loadData(){
+		try {
+			LinkedList<ModificationTypeDto> modificationTypes = mts.getAllInfo();
+			for (ModificationTypeDto mt :
+					modificationTypes) {
+				row[0] = mt.getIdModificationType();
+				row[1] = mt.getModification();
+				model.addRow(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
 

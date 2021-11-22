@@ -31,5 +31,9 @@ public class Main {
         } catch (SQLException e) {
             e.printStackTrace();
         }*/
+
+        /** REMEMBER
+         * Actualizar lista dto al modificar, insertar o eliminar registros
+         */
     }
 }

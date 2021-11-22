@@ -160,8 +160,8 @@ public class ServicesLocator {
     }
 
     public static ProgrammingTypeServices getProgrammingTypeServices() {
-        if (programmingServices == null) {
-            programmingServices = new ProgrammingServices();
+        if (programmingTypeServices == null) {
+            programmingTypeServices = new ProgrammingTypeServices();
         }
         return programmingTypeServices;
     }

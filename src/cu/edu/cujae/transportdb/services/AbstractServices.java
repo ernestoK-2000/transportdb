@@ -35,7 +35,7 @@ public abstract class AbstractServices<T> {
         java.sql.Connection connection = ServicesLocator.getConnection();
 
         String sqlFunction = "{call " + tableName + "_delete(?)}";
-        connection.setAutoCommit(false);
+        //connection.setAutoCommit(false);
         CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
         preparedFunction.setInt(1,id);
         preparedFunction.execute();
@@ -43,8 +43,6 @@ public abstract class AbstractServices<T> {
         preparedFunction.close();
         connection.close();
     }
-
-
 
 
     protected abstract T createDto(ResultSet resultSet) throws SQLException;

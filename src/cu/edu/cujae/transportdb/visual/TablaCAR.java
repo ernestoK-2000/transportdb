@@ -41,7 +41,7 @@ public class TablaCAR extends JDialog {
 		setTitle("Carros");
 		setBounds(100, 100, 629, 454);
 		getContentPane().setLayout(null);
-		
+		setModal(true);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 79, 593, 278);
@@ -183,7 +183,7 @@ public class TablaCAR extends JDialog {
 	}
 
 	private void SpinnerListModel(Object x) {
-		
+
 		
 	}
 }

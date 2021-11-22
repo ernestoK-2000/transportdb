@@ -53,6 +53,7 @@ public class TablaSituacionChofer extends JDialog {
 	 */
 	public TablaSituacionChofer() {
 		setTitle("Situacion del Conductor");
+		setModal(true);
 		setBounds(100, 100, 665, 445);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("649px:grow"),},
