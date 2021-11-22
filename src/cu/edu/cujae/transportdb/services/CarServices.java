@@ -18,7 +18,7 @@ public class CarServices extends AbstractServices<CarDto>{
                 resultSet.getString(2),
                 resultSet.getString(3),
                 resultSet.getInt(4),
-                resultSet.getFloat(5));
+                resultSet.getInt(5));
     }
 
     public void insertCar(CarDto carDto) throws SQLException{
@@ -26,6 +26,25 @@ public class CarServices extends AbstractServices<CarDto>{
         java.sql.Connection connection = ServicesLocator.getConnection();
 
         String sqlFunction = "{call " + tableName + "_insert(?, ?, ?, ?, ?)}";
+        System.out.println("{call " + tableName + "_insert(?, ?, ?, ?, ?)}");
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, carDto.getIdCar());
+        preparedFunction.setString(2, carDto.getCarNumber());
+        preparedFunction.setString(3, carDto.getCarBrand());
+        preparedFunction.setInt(4, carDto.getCarSeats());
+        preparedFunction.setInt(5, carDto.getKmAvailable());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
+
+    public void updateCar(CarDto carDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?, ?, ?)}";
         connection.setAutoCommit(false);
         CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
         preparedFunction.setInt(1, carDto.getIdCar());

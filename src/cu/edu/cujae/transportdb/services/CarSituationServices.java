@@ -38,4 +38,21 @@ public class CarSituationServices extends AbstractServices<CarSituationDto> {
         preparedFunction.close();
         connection.close();
     }
+
+    public void updateCarSituation(CarSituationDto carSituationDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, carSituationDto.getIdCarSituation());
+        preparedFunction.setDate(2, (Date) carSituationDto.getDate());
+        preparedFunction.setInt(3, carSituationDto.getIdCarSituationType());
+        preparedFunction.setInt(4, carSituationDto.getIdCar());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
 }

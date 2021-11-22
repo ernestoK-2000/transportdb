@@ -36,4 +36,20 @@ public class InsideDriverSituationServices extends AbstractServices<InsideDriver
         preparedFunction.close();
         connection.close();
     }
+
+    public void updateInsideDriverSituation(InsideDriverSituationDto insideDriverSituationDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, insideDriverSituationDto.getIdDriverSituation());
+        preparedFunction.setDate(2, (Date) insideDriverSituationDto.getReturnDate());
+        preparedFunction.setDate(3, (Date) insideDriverSituationDto.getDate());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
 }

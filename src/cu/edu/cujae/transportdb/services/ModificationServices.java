@@ -40,4 +40,22 @@ public class ModificationServices extends AbstractServices<ModificationDto> {
         preparedFunction.close();
         connection.close();
     }
+
+    public void updateModification(ModificationDto modificationDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?, ?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, modificationDto.getIdModification());
+        preparedFunction.setDate(2, (Date) modificationDto.getDate());
+        preparedFunction.setString(3, modificationDto.getNewValue().toString());
+        preparedFunction.setInt(4, modificationDto.getIdModificationType());
+        preparedFunction.setInt(5, modificationDto.getIdGroups());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
 }

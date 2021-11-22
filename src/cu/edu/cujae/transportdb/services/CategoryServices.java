@@ -18,11 +18,26 @@ public class CategoryServices extends AbstractServices<CategoryDto> {
         return new CategoryDto(resultSet.getInt(1), resultSet.getString(2));
     }
 
-    public void inserCategory(CategoryDto categoryDto) throws SQLException{
+    public void insertCategory(CategoryDto categoryDto) throws SQLException{
 
         java.sql.Connection connection = ServicesLocator.getConnection();
 
         String sqlFunction = "{call " + tableName + "_insert(?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, categoryDto.getIdCategory());
+        preparedFunction.setString(2, categoryDto.getCategory());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
+
+    public void updateCategory(CategoryDto categoryDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?)}";
         connection.setAutoCommit(false);
         CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
         preparedFunction.setInt(1, categoryDto.getIdCategory());

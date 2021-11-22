@@ -2,12 +2,12 @@ package cu.edu.cujae.transportdb.dto;
 
 public class RoadmapDto {
     private final int idRoadmap;
-    private float initialKm;
-    private float finalKm;
+    private int initialKm;
+    private int finalKm;
     private int idAssignedCar;
     private int idProgramming;
 
-    public RoadmapDto(int idRoadmap, float initialKm, float finalKm, int idAssignedCar, int idProgramming) {
+    public RoadmapDto(int idRoadmap, int initialKm, int finalKm, int idAssignedCar, int idProgramming) {
         this.idRoadmap = idRoadmap;
         this.initialKm = initialKm;
         this.finalKm = finalKm;
@@ -19,19 +19,19 @@ public class RoadmapDto {
         return idRoadmap;
     }
 
-    public float getInitialKm() {
+    public int getInitialKm() {
         return initialKm;
     }
 
-    public void setInitialKm(float initialKm) {
+    public void setInitialKm(int initialKm) {
         this.initialKm = initialKm;
     }
 
-    public float getFinalKm() {
+    public int getFinalKm() {
         return finalKm;
     }
 
-    public void setFinalKm(float finalKm) {
+    public void setFinalKm(int finalKm) {
         this.finalKm = finalKm;
     }
 

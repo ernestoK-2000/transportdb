@@ -5,9 +5,9 @@ public class CarDto extends Dto{
     private String carNumber;
     private String carBrand;
     private int carSeats;
-    private float kmAvailable;
+    private int kmAvailable;
 
-    public CarDto(int idCar, String carNumber, String carBrand, int carSeats, float kmAvailable) {
+    public CarDto(int idCar, String carNumber, String carBrand, int carSeats, int kmAvailable) {
         this.idCar = idCar;
         this.carNumber = carNumber;
         this.carBrand = carBrand;
@@ -43,11 +43,11 @@ public class CarDto extends Dto{
         this.carSeats = carSeats;
     }
 
-    public float getKmAvailable() {
+    public int getKmAvailable() {
         return kmAvailable;
     }
 
-    public void setKmAvailable(float kmAvailable) {
+    public void setKmAvailable(int kmAvailable) {
         this.kmAvailable = kmAvailable;
     }
 }

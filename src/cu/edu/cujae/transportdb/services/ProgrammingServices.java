@@ -44,4 +44,24 @@ public class ProgrammingServices extends AbstractServices<ProgrammingDto> {
         preparedFunction.close();
         connection.close();
     }
+
+    public void updateProgramming(ProgrammingDto programmingDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?, ?, ?, ?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, programmingDto.getIdProgramming());
+        preparedFunction.setTime(2, (Time) programmingDto.getStartTime());
+        preparedFunction.setTime(3, (Time) programmingDto.getEndTime());
+        preparedFunction.setString(4, programmingDto.getPickUpPlace());
+        preparedFunction.setInt(5, programmingDto.getIdProgrammingType());
+        preparedFunction.setInt(6, programmingDto.getIdApplication());
+        preparedFunction.setInt(7, programmingDto.getIdModification());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
 }

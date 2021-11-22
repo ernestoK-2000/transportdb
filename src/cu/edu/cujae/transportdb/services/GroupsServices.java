@@ -35,4 +35,20 @@ public class GroupsServices extends AbstractServices<GroupsDto> {
         preparedFunction.close();
         connection.close();
     }
+
+    public void updateGroups(GroupsDto groupsDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, groupsDto.getIdGroups());
+        preparedFunction.setInt(2, groupsDto.getAmountOfPeople());
+        preparedFunction.setInt(3, groupsDto.getIdCountry());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
 }

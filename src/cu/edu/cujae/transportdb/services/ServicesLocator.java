@@ -31,7 +31,7 @@ public class ServicesLocator {
     public static java.sql.Connection getConnection(){
         Connection connection = null;
         try {
-            connection = new Connection("localhost", "transportdb", "postgres", "postgres");
+            connection = new Connection("localhost", "transportdb-v2", "postgres", "postgres");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -48,74 +48,128 @@ public class ServicesLocator {
     }
 
     public static ApplicationServices getApplicationServices() {
+        if (applicationServices == null) {
+            applicationServices = new ApplicationServices();
+        }
         return applicationServices;
     }
 
     public static AssignedCarServices getAssignedCarServices() {
+        if (assignedCarServices == null) {
+            assignedCarServices = new AssignedCarServices();
+        }
         return assignedCarServices;
     }
 
     public static CarBrandServices getCarBrandServices() {
+        if (carBrandServices == null) {
+            carBrandServices = new CarBrandServices();
+        }
         return carBrandServices;
     }
 
     public static CarSituationServices getCarSituationServices() {
+        if (carSituationServices == null) {
+            carSituationServices = new CarSituationServices();
+        }
         return carSituationServices;
     }
 
     public static CarSituationTypeServices getCarSituationTypeServices() {
+        if (carSituationTypeServices == null) {
+            carSituationTypeServices = new CarSituationTypeServices();
+        }
         return carSituationTypeServices;
     }
 
     public static CategoryServices getCategoryServices() {
+        if (categoryServices == null) {
+            categoryServices = new CategoryServices();
+        }
         return categoryServices;
     }
 
     public static CountryServices getCountryServices() {
+        if (countryServices == null) {
+            countryServices = new CountryServices();
+        }
         return countryServices;
     }
 
     public static DriverServices getDriverServices() {
+        if (driverServices == null) {
+            driverServices = new DriverServices();
+        }
         return driverServices;
     }
 
     public static DriverSituationServices getDriverSituationServices() {
+        if (driverSituationServices == null) {
+            driverSituationServices = new DriverSituationServices();
+        }
         return driverSituationServices;
     }
 
     public static DriverSituationTypeServices getDriverSituationTypeServices() {
+        if (driverSituationTypeServices == null) {
+            driverSituationTypeServices = new DriverSituationTypeServices();
+        }
         return driverSituationTypeServices;
     }
 
     public static GroupsServices getGroupsServices() {
+        if (groupsServices == null) {
+            groupsServices = new GroupsServices();
+        }
         return groupsServices;
     }
 
     public static InsideCarSituationServices getInsideCarSituationServices() {
+        if (insideCarSituationServices == null) {
+            insideCarSituationServices = new InsideCarSituationServices();
+        }
         return insideCarSituationServices;
     }
 
     public static InsideDriverSituationServices getInsideDriverSituationServices() {
+        if (insideDriverSituationServices == null) {
+            insideDriverSituationServices = new InsideDriverSituationServices();
+        }
         return insideDriverSituationServices;
     }
 
     public static ModificationServices getModificationServices() {
+        if (modificationServices == null) {
+            modificationServices = new ModificationServices();
+        }
         return modificationServices;
     }
 
     public static ModificationTypeServices getModificationTypeServices() {
+        if (modificationTypeServices == null) {
+            modificationTypeServices = new ModificationTypeServices();
+        }
         return modificationTypeServices;
     }
 
     public static ProgrammingServices getProgrammingServices() {
+        if (programmingServices == null) {
+            programmingServices = new ProgrammingServices();
+        }
         return programmingServices;
     }
 
     public static ProgrammingTypeServices getProgrammingTypeServices() {
+        if (programmingServices == null) {
+            programmingServices = new ProgrammingServices();
+        }
         return programmingTypeServices;
     }
 
     public static RoadMapServices getRoadMapServices() {
+        if (roadMapServices == null) {
+            roadMapServices = new RoadMapServices();
+        }
         return roadMapServices;
     }
 }

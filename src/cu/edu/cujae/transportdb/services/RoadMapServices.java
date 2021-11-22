@@ -16,8 +16,8 @@ public class RoadMapServices extends AbstractServices<RoadmapDto> {
     @Override
     protected RoadmapDto createDto(ResultSet resultSet) throws SQLException {
         return new RoadmapDto(resultSet.getInt(1),
-                resultSet.getFloat(2),
-                resultSet.getFloat(3),
+                resultSet.getInt(2),
+                resultSet.getInt(3),
                 resultSet.getInt(4),
                 resultSet.getInt(5));
     }
@@ -27,6 +27,24 @@ public class RoadMapServices extends AbstractServices<RoadmapDto> {
         java.sql.Connection connection = ServicesLocator.getConnection();
 
         String sqlFunction = "{call " + tableName + "_insert(?, ?, ?, ?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, roadmapDto.getIdRoadmap());
+        preparedFunction.setInt(2, roadmapDto.getInitialKm());
+        preparedFunction.setInt(3, roadmapDto.getFinalKm());
+        preparedFunction.setInt(4, roadmapDto.getIdAssignedCar());
+        preparedFunction.setInt(5, roadmapDto.getIdProgramming());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
+
+    public void updateRoadMap(RoadmapDto roadmapDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?, ?, ?)}";
         connection.setAutoCommit(false);
         CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
         preparedFunction.setInt(1, roadmapDto.getIdRoadmap());

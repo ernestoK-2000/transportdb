@@ -1,9 +1,6 @@
 package cu.edu.cujae.transportdb.services;
 
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.LinkedList;
 
 public abstract class AbstractServices<T> {
@@ -46,6 +43,8 @@ public abstract class AbstractServices<T> {
         preparedFunction.close();
         connection.close();
     }
+
+
 
 
     protected abstract T createDto(ResultSet resultSet) throws SQLException;

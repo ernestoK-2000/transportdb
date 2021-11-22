@@ -33,4 +33,19 @@ public class CarBrandServices extends AbstractServices<CarBrandDto> {
         preparedFunction.close();
         connection.close();
     }
+
+    public void updateCarBrand(CarBrandDto carBrandDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, carBrandDto.getIdBrand());
+        preparedFunction.setString(2, carBrandDto.getBrand());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
 }

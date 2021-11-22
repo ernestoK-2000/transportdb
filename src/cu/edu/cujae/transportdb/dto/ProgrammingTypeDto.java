@@ -7,9 +7,9 @@ public class ProgrammingTypeDto {
     private final int idProgrammingType;
     private String programmingType;
     private Date delayTime;
-    private float kmToTravel;
+    private int kmToTravel;
 
-    public ProgrammingTypeDto(int idProgrammingType, String programmingType, Date delayTime, float kmToTravel) {
+    public ProgrammingTypeDto(int idProgrammingType, String programmingType, Date delayTime, int kmToTravel) {
         this.idProgrammingType = idProgrammingType;
         this.programmingType = programmingType;
         this.delayTime = delayTime;
@@ -36,11 +36,11 @@ public class ProgrammingTypeDto {
         this.delayTime = delayTime;
     }
 
-    public float getKmToTravel() {
+    public int getKmToTravel() {
         return kmToTravel;
     }
 
-    public void setKmToTravel(float kmToTravel) {
+    public void setKmToTravel(int kmToTravel) {
         this.kmToTravel = kmToTravel;
     }
 }

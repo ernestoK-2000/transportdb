@@ -19,7 +19,7 @@ public class ProgrammingTypeServices extends AbstractServices<ProgrammingTypeDto
         return new ProgrammingTypeDto(resultSet.getInt(1),
                 resultSet.getString(4),
                 resultSet.getDate(2),
-                resultSet.getFloat(3));
+                resultSet.getInt(3));
     }
 
     public void insertProgrammingType(ProgrammingTypeDto programmingTypeDto) throws SQLException{
@@ -27,6 +27,23 @@ public class ProgrammingTypeServices extends AbstractServices<ProgrammingTypeDto
         java.sql.Connection connection = ServicesLocator.getConnection();
 
         String sqlFunction = "{call " + tableName + "_insert(?, ?, ?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, programmingTypeDto.getIdProgrammingType());
+        preparedFunction.setTime(2, (Time) programmingTypeDto.getDelayTime());
+        preparedFunction.setInt(3, programmingTypeDto.getKmToTravel());
+        preparedFunction.setString(4, programmingTypeDto.getProgrammingType());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
+
+    public void updateProgrammingType(ProgrammingTypeDto programmingTypeDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?, ?)}";
         connection.setAutoCommit(false);
         CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
         preparedFunction.setInt(1, programmingTypeDto.getIdProgrammingType());

@@ -36,4 +36,20 @@ public class InsideCarSituationServices extends AbstractServices<InsideCarSituat
         preparedFunction.close();
         connection.close();
     }
+
+    public void updateInsideCarSituation(InsideCarSituationDto insideCarSituationDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, insideCarSituationDto.getIdCarSituation());
+        preparedFunction.setDate(2, (Date) insideCarSituationDto.getDate());
+        preparedFunction.setDate(3, (Date) insideCarSituationDto.getReturnDate());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
 }

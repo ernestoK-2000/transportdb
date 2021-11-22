@@ -40,4 +40,23 @@ public class DriverServices extends AbstractServices<DriverDto> {
         preparedFunction.close();
         connection.close();
     }
+
+    public void updateDriver(DriverDto driverDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?, ?, ?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, driverDto.getIdDriver());
+        preparedFunction.setString(2, driverDto.getDni());
+        preparedFunction.setString(3, driverDto.getDriverName());
+        preparedFunction.setString(4, driverDto.getDriverSurname());
+        preparedFunction.setString(5, driverDto.getDriverAddress());
+        preparedFunction.setInt(6, driverDto.getIdCategory());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
 }

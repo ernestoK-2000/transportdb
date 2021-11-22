@@ -1,15 +1,22 @@
 package cu.edu.cujae.transportdb;
 
-import cu.edu.cujae.transportdb.visual.Window;
+import cu.edu.cujae.transportdb.visual.Principal;
 
 public class Main {
     public static void main(String[] args) {
 
-        Window w = new Window();
-        w.setBounds(100, 100, 500, 500);
-        w.setVisible(true);
+        Principal frame = new Principal();
+        frame.setVisible(true);
+
+        //CarServices cs = ServicesLocator.getCarServices();
+        //try {
+            //cs.insertCar(new CarDto(0, "0000000000", "Toyota", 4, 1000));
 
 
+
+        //} catch (SQLException e) {
+            //e.printStackTrace();
+       // }
 
         /*CarServices cs = ServicesLocator.getCarServices();
 

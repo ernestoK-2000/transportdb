@@ -39,4 +39,21 @@ public class DriverSituationServices extends AbstractServices<DriverSituationDto
         preparedFunction.close();
         connection.close();
     }
+
+    public void updateDriverSituation(DriverSituationDto driverSituationDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?, ?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, driverSituationDto.getIdDriverSituation());
+        preparedFunction.setDate(2, (Date) driverSituationDto.getDate());
+        preparedFunction.setInt(3, driverSituationDto.getIdDriverSituationType());
+        preparedFunction.setInt(4, driverSituationDto.getIdDriver());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
 }

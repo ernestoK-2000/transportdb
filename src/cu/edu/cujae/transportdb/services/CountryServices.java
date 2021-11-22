@@ -32,4 +32,19 @@ public class CountryServices extends AbstractServices<CountryDto> {
         preparedFunction.close();
         connection.close();
     }
+
+    public void updateCountry(CountryDto countryDto) throws SQLException{
+
+        java.sql.Connection connection = ServicesLocator.getConnection();
+
+        String sqlFunction = "{call " + tableName + "_update(?, ?)}";
+        connection.setAutoCommit(false);
+        CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
+        preparedFunction.setInt(1, countryDto.getIdCountry());
+        preparedFunction.setString(2, countryDto.getCountry());
+        preparedFunction.execute();
+
+        preparedFunction.close();
+        connection.close();
+    }
 }
