@@ -1,5 +1,11 @@
 package cu.edu.cujae.transportdb.visual;
 
+import cu.edu.cujae.transportdb.dto.CarDto;
+import cu.edu.cujae.transportdb.dto.CountryDto;
+import cu.edu.cujae.transportdb.dto.GroupsDto;
+import cu.edu.cujae.transportdb.services.CarServices;
+import cu.edu.cujae.transportdb.services.ServicesLocator;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -24,15 +30,25 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SpinnerDateModel;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class TablaCAR extends JDialog {
 	private JTextField textField;
 	private JTable table;
 
-
-
+	private final DefaultTableModel model = new DefaultTableModel(){
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			//all cells false
+			return false;
+		}
+	};
+	private final Object[] row= new Object[6];
+	CarServices cs = ServicesLocator.getCarServices();
 
 	/**
 	 * Create the dialog.
@@ -50,23 +66,23 @@ public class TablaCAR extends JDialog {
 		getContentPane().add(scrollPane);
 		
 		table = new JTable();
-		final DefaultTableModel model = new DefaultTableModel();
+
 		table.setBounds(0, 121, 686, 255);
 		Object[] columns = {"Número del carro", "Asientos", "Marca", "Km Disponibles"};
 		
 		model.setColumnIdentifiers(columns);
 		//getContentPane().add(table);
-		table.setToolTipText("aaaaaaaaa");
+		table.setToolTipText("");
 		table.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		table.setBackground(Color.white);
 		table.setForeground(Color.black);
-		table.setSelectionBackground(Color.red);
-		table.setGridColor(Color.red);
+		table.setSelectionBackground(Color.lightGray);
+		table.setGridColor(Color.black);
 		table.setRowHeight(30);
 		table.setAutoCreateRowSorter(true);
 		table.setModel(model);
 		scrollPane.setViewportView(table);
-		final Object[] row= new Object[6];
+
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(10, 11, 593, 60);
@@ -180,10 +196,30 @@ public class TablaCAR extends JDialog {
 		});
 		btnNewButton_3.setBounds(462, 4, 141, 36);
 		panel.add(btnNewButton_3);
+
+		loadData();
 	}
 
 	private void SpinnerListModel(Object x) {
 
 		
+	}
+
+	private void loadData() {
+		LinkedList<CarDto> cars = null;
+		try {
+			cars = cs.getAllInfo();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		for (CarDto c :
+				cars) {
+			row[2] = c.getCarBrand();
+			row[1] = c.getCarSeats();
+			row[3] = c.getKmAvailable();
+			row[0] = c.getCarNumber();
+
+			model.addRow(row);
+		}
 	}
 }

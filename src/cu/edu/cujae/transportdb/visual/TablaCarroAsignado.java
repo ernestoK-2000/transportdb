@@ -69,7 +69,13 @@ public class TablaCarroAsignado extends JDialog {
 				RowSpec.decode("297px:grow"),
 				RowSpec.decode("70px:grow"),}));
 		final Object[] row= new Object[6];
-		final DefaultTableModel model = new DefaultTableModel();
+		final DefaultTableModel model = new DefaultTableModel(){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				//all cells false
+				return false;
+			}
+		};
 		{
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, "1, 2, fill, fill");
@@ -88,12 +94,12 @@ public class TablaCarroAsignado extends JDialog {
 				Object[] columns = {"Fecha", "Numero del carro", "DNI Conductor", "DNI Copiloto"};
 				
 				model.setColumnIdentifiers(columns);
-				table.setToolTipText("aaaaaaaaa");
+				table.setToolTipText("");
 				table.setFont(new Font("Times New Roman", Font.BOLD, 16));
 				table.setBackground(Color.white);
 				table.setForeground(Color.black);
-				table.setSelectionBackground(Color.red);
-				table.setGridColor(Color.red);
+				table.setSelectionBackground(Color.lightGray);
+				table.setGridColor(Color.black);
 				table.setRowHeight(30);
 				table.setAutoCreateRowSorter(true);
 				table.setModel(model);
@@ -229,7 +235,7 @@ public class TablaCarroAsignado extends JDialog {
 				});
 			}
 			{
-				btnNewButton_2 = new JButton("Elimiar");
+				btnNewButton_2 = new JButton("Eliminar");
 				btnNewButton_2.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						int a = table.getSelectedRow();

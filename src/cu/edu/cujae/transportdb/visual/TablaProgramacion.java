@@ -8,8 +8,12 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 //import java.sql.Date;
+import java.sql.SQLException;
+import java.sql.Time;
 import java.util.Date;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -30,6 +34,13 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
+import cu.edu.cujae.transportdb.dto.CountryDto;
+import cu.edu.cujae.transportdb.dto.GroupsDto;
+import cu.edu.cujae.transportdb.dto.ProgrammingDto;
+import cu.edu.cujae.transportdb.dto.ProgrammingTypeDto;
+import cu.edu.cujae.transportdb.services.ProgrammingServices;
+import cu.edu.cujae.transportdb.services.ProgrammingTypeServices;
+import cu.edu.cujae.transportdb.services.ServicesLocator;
 
 import javax.swing.JComboBox;
 import javax.swing.SpinnerNumberModel;
@@ -50,13 +61,23 @@ public class TablaProgramacion extends JDialog {
 	private JLabel lblCodplanificacion;
 	private JTextField textField_1;
 
+	private final Object[] row = new Object[6];
+	private final DefaultTableModel model = new DefaultTableModel(){
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			//all cells false
+			return false;
+		}
+	};
+	private ProgrammingServices ps = ServicesLocator.getProgrammingServices();
+	private ProgrammingTypeServices pts = ServicesLocator.getProgrammingTypeServices();
 
 
 	/**
 	 * Create the dialog.
 	 */
 	public TablaProgramacion() {
-		setTitle("Programacion");
+		setTitle("Programación");
 		setBounds(100, 100, 681, 445);
 		setModal(true);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
@@ -65,8 +86,7 @@ public class TablaProgramacion extends JDialog {
 				RowSpec.decode("66px:grow"),
 				RowSpec.decode("297px:grow"),
 				RowSpec.decode("41px:grow"),}));
-		final Object[] row= new Object[6];
-		final DefaultTableModel model = new DefaultTableModel();
+
 		{
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, "1, 2, fill, fill");
@@ -85,12 +105,12 @@ public class TablaProgramacion extends JDialog {
 				Object[] columns = {"Lugar de Recogida", "Codigo de Solicitud", "Hora de salida", "Hora de llegada"};
 				
 				model.setColumnIdentifiers(columns);
-				table.setToolTipText("aaaaaaaaa");
+				table.setToolTipText("");
 				table.setFont(new Font("Times New Roman", Font.BOLD, 16));
 				table.setBackground(Color.white);
 				table.setForeground(Color.black);
-				table.setSelectionBackground(Color.red);
-				table.setGridColor(Color.red);
+				table.setSelectionBackground(Color.lightGray);
+				table.setGridColor(Color.black);
 				table.setRowHeight(30);
 				table.setAutoCreateRowSorter(true);
 				table.setModel(model);
@@ -196,11 +216,7 @@ public class TablaProgramacion extends JDialog {
 						if(!(textField.getText().toString().equals(""))){
 							if(!(textField_1.getText().toString().equals(""))){
 								if(x.before(y)){
-									row[0] = textField.getText().toString();
-									row[1] = textField_1.getText().toString();
-									row[2] = spinner.getValue();
-									row[3] = spinner_1.getValue();
-									model.addRow(row);
+									insertData();
 									}else JOptionPane.showMessageDialog(null, "Error. La hora de llegada debe ser posterior a la hora de entrada ");
 								}else JOptionPane.showMessageDialog(null, "Error. Por favor ingrese un codigo de solicitud valido ");
 							}else JOptionPane.showMessageDialog(null, "Error. Por favor ingrese un lugar de recogid valido ");
@@ -219,10 +235,7 @@ public class TablaProgramacion extends JDialog {
 							if(!(textField.getText().toString().equals(""))){
 								if(!(textField_1.getText().toString().equals(""))){
 									if(x.before(y)){
-										model.setValueAt(textField.getText().toString(), a, 0);
-										model.setValueAt(textField_1.getText().toString(), a, 1);
-										model.setValueAt(spinner.getValue(), a, 2);
-										model.setValueAt(spinner_1.getValue(), a, 3);
+										modifyData(a);
 									}else JOptionPane.showMessageDialog(null, "Error. La hora de llegada debe ser posterior a la hora de entrada ");
 								}else JOptionPane.showMessageDialog(null, "Error. Por favor ingrese un codigo de solicitud valido ");
 							}else JOptionPane.showMessageDialog(null, "Error. Por favor ingrese un lugar de recogid valido ");		
@@ -232,12 +245,12 @@ public class TablaProgramacion extends JDialog {
 				});
 			}
 			{
-				btnNewButton_2 = new JButton("Elimiar");
+				btnNewButton_2 = new JButton("Eliminar");
 				btnNewButton_2.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						int a = table.getSelectedRow();
 						if(a>=0)
-							model.removeRow(a);
+							deleteData(a);
 						else
 							JOptionPane.showMessageDialog(null, "Error al Eliminar, por favor elija una fila");
 					}
@@ -277,8 +290,138 @@ public class TablaProgramacion extends JDialog {
 			);
 			buttonPane.setLayout(gl_buttonPane);
 		}
-		
-		
+		loadData();
 	}
 
+	private void loadData() {
+		LinkedList<ProgrammingDto> programmings = null;
+		LinkedList<ProgrammingTypeDto> programmingTypes = null;
+		try {
+			programmings = ps.getAllInfo();
+			programmingTypes = pts.getAllInfo();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		for (ProgrammingDto p :
+				programmings) {
+			row[2] = p.getStartTime();
+			row[3] = p.getEndTime();
+			row[0] = p.getPickUpPlace();
+			row[1] = p.getIdApplication();
+			row[5] = p.getIdModification();
+
+			boolean found = false;
+			Iterator<ProgrammingTypeDto> iter = programmingTypes.iterator();
+			while (iter.hasNext() && !found) {
+				ProgrammingTypeDto pt = iter.next();
+				if (pt.getIdProgrammingType() == p.getIdProgrammingType()) {
+					found = true;
+					row[4] = pt.getProgrammingType();
+				}
+			}
+			model.addRow(row);
+		}
+	}
+
+	private void insertData() {
+		//get modification info
+		String pickUpPlaceAfter =  textField.getText();
+		int idApplicationAfter = Integer.parseInt(textField_1.getText());
+		Time startTimeAfter = new Time(((java.util.Date)spinner.getValue()).getTime());
+		Time endTimeAfter = new Time(((java.util.Date)spinner_1.getValue()).getTime());
+
+		row[0] = textField.getText().toString();
+		row[1] = textField_1.getText().toString();
+		row[2] = spinner.getValue();
+		row[3] = spinner_1.getValue();
+		model.addRow(row);
+
+		//insert gui
+		row[0] = pickUpPlaceAfter;
+		row[1] = idApplicationAfter;
+		row[2] = startTimeAfter;
+		row[3] = endTimeAfter;
+		model.addRow(row);
+
+		try {
+			//insert db
+			ps.insertProgramming(new ProgrammingDto(startTimeAfter, endTimeAfter, pickUpPlaceAfter, 0, 1, 1, 4));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void modifyData(int rowNumber){
+
+		try{
+			//get current info
+			String pickUpPlaceBefore =  model.getValueAt(rowNumber, 0).toString();
+			int idApplicationBefore = (int) (model.getValueAt(rowNumber, 1));
+			Time startTimeBefore = new Time(((java.util.Date)model.getValueAt(rowNumber, 2)).getTime());
+			Time endTimeBefore = new Time(((java.util.Date)model.getValueAt(rowNumber, 3)).getTime());
+
+
+			//get modification info
+			String pickUpPlaceAfter =  textField.getText();
+			int idApplicationAfter = Integer.parseInt(textField_1.getText());
+			Time startTimeAfter = new Time(((java.util.Date)spinner.getValue()).getTime());
+			Time endTimeAfter = new Time(((java.util.Date)spinner_1.getValue()).getTime());
+
+			//change info in gui
+			model.setValueAt(pickUpPlaceAfter, rowNumber, 0);
+			model.setValueAt(idApplicationAfter, rowNumber, 1);
+			model.setValueAt(startTimeAfter, rowNumber, 2);
+			model.setValueAt(endTimeAfter, rowNumber, 3);
+
+			//change info in bd
+            /*
+            Info needed:
+            - idProgramming
+            - startTimeAfter
+            - endTimeAfter
+            - pickupPlaceAfter
+            - idProgrammingTypeAfter
+            - idApplicationAfter
+            - idModificationAfter
+             */
+
+			//Find idProgramming
+            /*
+            Info needed:
+            - startTimeBefore
+            - endTimeBefore
+            - pickupPlaceBefore
+            - idApplicationBefore
+             */
+
+			int idProgramming = ps.getIdProgramming(startTimeBefore, endTimeBefore, pickUpPlaceBefore, idApplicationBefore);
+
+			System.out.println(startTimeAfter);
+			System.out.println(endTimeAfter);
+			System.out.println(pickUpPlaceAfter);
+			System.out.println(idApplicationAfter);
+			ps.updateProgramming(new ProgrammingDto(startTimeAfter, endTimeAfter, pickUpPlaceAfter, 0, 1, 1, 4));
+
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteData(int rowNumber){
+		//get current info
+		String pickUpPlaceBefore =  model.getValueAt(rowNumber, 0).toString();
+		int idApplicationBefore = (int) (model.getValueAt(rowNumber, 1));
+		Time startTimeBefore = new Time(((java.util.Date)model.getValueAt(rowNumber, 2)).getTime());
+		Time endTimeBefore = new Time(((java.util.Date)model.getValueAt(rowNumber, 3)).getTime());
+
+		//delete from gui
+		model.removeRow(rowNumber);
+
+		//delete from db
+		try{
+			ps.deleteRegister(ps.getIdProgramming(startTimeBefore, endTimeBefore, pickUpPlaceBefore, idApplicationBefore));
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
 }

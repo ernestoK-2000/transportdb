@@ -70,7 +70,13 @@ public class TablaConductor extends JDialog {
 		setModal(true);
 		
 		table = new JTable();
-		final DefaultTableModel model = new DefaultTableModel();
+		final DefaultTableModel model = new DefaultTableModel(){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				//all cells false
+				return false;
+			}
+		};
 		/*table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -85,16 +91,16 @@ public class TablaConductor extends JDialog {
 			}
 		});*/
 		table.setBounds(0, 121, 686, 255);
-		Object[] columns = {"Nombre", "1er Apellido", "2do Apeliido", "DNI", "Categoria", "Direccion"};
+		Object[] columns = {"Nombre", "1er Apellido", "2do Apellido", "DNI", "Categoría", "Dirección"};
 		
 		model.setColumnIdentifiers(columns);
 		getContentPane().add(table);
-		table.setToolTipText("aaaaaaaaa");
+		table.setToolTipText("");
 		table.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		table.setBackground(Color.white);
 		table.setForeground(Color.black);
-		table.setSelectionBackground(Color.red);
-		table.setGridColor(Color.red);
+		table.setSelectionBackground(Color.lightGray);
+		table.setGridColor(Color.black);
 		table.setRowHeight(30);
 		table.setAutoCreateRowSorter(true);
 		table.setModel(model);
@@ -106,7 +112,7 @@ public class TablaConductor extends JDialog {
 		one.setBounds(10,122,669,279);
 		getContentPane().add(one);
 		
-		final Object[] row= new Object[6];
+		final Object[] row = new Object[6];
 		
 		
 		

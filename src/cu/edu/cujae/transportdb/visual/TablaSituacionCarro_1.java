@@ -57,7 +57,13 @@ public class TablaSituacionCarro_1 extends JDialog {
 				RowSpec.decode("358px:grow"),
 				RowSpec.decode("41px:grow"),}));
 		final Object[] row= new Object[6];
-		final DefaultTableModel model = new DefaultTableModel();
+		final DefaultTableModel model = new DefaultTableModel(){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				//all cells false
+				return false;
+			}
+		};
 		{
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, "1, 2, fill, fill");
@@ -76,12 +82,12 @@ public class TablaSituacionCarro_1 extends JDialog {
 				Object[] columns = {"Numero del carro", "Situacion"};
 				
 				model.setColumnIdentifiers(columns);
-				table.setToolTipText("aaaaaaaaa");
+				table.setToolTipText("");
 				table.setFont(new Font("Times New Roman", Font.BOLD, 16));
 				table.setBackground(Color.white);
 				table.setForeground(Color.black);
-				table.setSelectionBackground(Color.red);
-				table.setGridColor(Color.red);
+				table.setSelectionBackground(Color.lightGray);
+				table.setGridColor(Color.black);
 				table.setRowHeight(30);
 				table.setAutoCreateRowSorter(true);
 				table.setModel(model);

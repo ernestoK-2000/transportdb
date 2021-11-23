@@ -56,9 +56,17 @@ public class TablaSolicitud extends JDialog {
 	private JSpinner spinner;
 	private JScrollPane scrollPane;
 	private JCheckBox chckbxNewCheckBox;
+	private JLabel lblNewLabel;
+	private JSpinner spinner_1;
 
 	private final Object[] row= new Object[6];
-	private final DefaultTableModel model = new DefaultTableModel();
+	private final DefaultTableModel model = new DefaultTableModel(){
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			//all cells false
+			return false;
+		}
+	};
 
 	private ApplicationServices as = ServicesLocator.getApplicationServices();
 	private LinkedList<ApplicationDto> applications;
@@ -100,12 +108,12 @@ public class TablaSolicitud extends JDialog {
 				Object[] columns = {"Fecha", "Solicitud", "Grupo"};
 				
 				model.setColumnIdentifiers(columns);
-				table.setToolTipText("aaaaaaaaa");
+				table.setToolTipText("");
 				table.setFont(new Font("Times New Roman", Font.BOLD, 16));
 				table.setBackground(Color.white);
 				table.setForeground(Color.black);
-				table.setSelectionBackground(Color.red);
-				table.setGridColor(Color.red);
+				table.setSelectionBackground(Color.lightGray);
+				table.setGridColor(Color.black);
 				table.setRowHeight(30);
 				table.setAutoCreateRowSorter(true);
 				table.setModel(model);
@@ -182,6 +190,15 @@ public class TablaSolicitud extends JDialog {
 				});
 				panel.add(chckbxNewCheckBox, "10, 2");
 			}
+			{
+				lblNewLabel = new JLabel("Grupo");
+				panel.add(lblNewLabel, "3, 4, right, default");
+			}
+			{
+				spinner_1 = new JSpinner();
+				spinner_1.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+				panel.add(spinner_1, "5, 4, fill, default");
+			}
 		}
 		///////
 		
@@ -193,12 +210,7 @@ public class TablaSolicitud extends JDialog {
 				btnNewButton = new JButton("A\u00F1adir");
 				btnNewButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-									row[0] = spinner.getValue();
-									if(x == true) row[1] = "Aceptada";
-									else row[1] = "Denegada";
-									
-									model.addRow(row);
-					
+									insertData();
 				}
 			});
 			}
@@ -209,9 +221,7 @@ public class TablaSolicitud extends JDialog {
 						int a = table.getSelectedRow();
 						if(a>=0){
 							
-										model.setValueAt(spinner.getValue(), a, 0);
-										if(x == true) model.setValueAt("Aceptada", a, 1);
-										else model.setValueAt("Denegada", a, 1);
+										modifyData(a);
 										
 										
 									
@@ -221,19 +231,19 @@ public class TablaSolicitud extends JDialog {
 				});
 			}
 			{
-				btnNewButton_2 = new JButton("Elimiar");
+				btnNewButton_2 = new JButton("Eliminar");
 				btnNewButton_2.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						int a = table.getSelectedRow();
 						if(a>=0)
-							model.removeRow(a);
+							deleteData(a);
 						else
 							JOptionPane.showMessageDialog(null, "Error al Eliminar, por favor elija una fila");
 					}
 				});
 			}
 			{
-				btnNewButton_3 = new JButton("Atras");
+				btnNewButton_3 = new JButton("Atrás");
 				btnNewButton_3.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						dispose();
@@ -277,6 +287,94 @@ public class TablaSolicitud extends JDialog {
 			row[2] = a.getIdGroups();
 
 			model.addRow(row);
+		}
+	}
+
+	private void insertData() {
+		//get modification info
+		Date dateAfter = new Date(((java.util.Date)spinner.getValue()).getTime());
+		boolean acepptedAfter = chckbxNewCheckBox.isSelected();
+		int idGroupsAfter = (int) spinner_1.getValue();
+
+		//insert gui
+		row[0] = dateAfter;
+		row[1] = acepptedAfter ? "Aceptada" : "Denegada";
+		row[2] = idGroupsAfter;
+		model.addRow(row);
+
+
+		try {
+			//insert db
+			as.insertApplication(new ApplicationDto(0, acepptedAfter, dateAfter, idGroupsAfter));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void modifyData(int rowNumber){
+
+		try{
+			//get current info
+			Date dateBefore = (Date) model.getValueAt(rowNumber, 0);
+			boolean acceptedBefore = (model.getValueAt(rowNumber, 1).toString().equals("Aceptada"));
+			int idGroupsBefore = (int) model.getValueAt(rowNumber, 2);
+
+
+			//get modification info
+			Date dateAfter = new Date(((java.util.Date)spinner.getValue()).getTime());
+			boolean acepptedAfter = chckbxNewCheckBox.isSelected();
+			int idGroupsAfter = (int) spinner_1.getValue();
+
+			//change info in gui
+			model.setValueAt(dateAfter, rowNumber, 0);
+			model.setValueAt(acepptedAfter ? "Aceptada" : "Denegada", rowNumber, 1);
+			model.setValueAt(idGroupsAfter, rowNumber, 2);
+
+			//change info in bd
+            /*
+            Info needed:
+            - idApplication
+            - dateAfter
+            - acepptedAfter
+            - idGroupsAfter
+             */
+
+
+			//Find idApplication
+            /*
+            Info needed:
+            - dateBefore
+            - acceptedBefore
+            - idGroupsBefore
+             */
+
+			int idApplication = as.getIdApplication(acceptedBefore, dateBefore, idGroupsBefore);
+
+			System.out.println(idApplication);
+			System.out.println(acepptedAfter);
+			System.out.println(dateAfter);
+			System.out.println(idGroupsAfter);
+			as.updateApplication(new ApplicationDto(idApplication, acepptedAfter, dateAfter, idGroupsAfter));
+
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteData(int rowNumber){
+		//get current info
+		Date dateBefore = (Date) model.getValueAt(rowNumber, 0);
+		boolean acepptedBefore = (model.getValueAt(rowNumber, 1).toString().equals("Aceptada"));
+		int idGroupsBefore = (int) model.getValueAt(rowNumber, 2);
+
+		//delete from gui
+		model.removeRow(rowNumber);
+
+		//delete from db
+		try{
+			as.deleteRegister(as.getIdApplication(acepptedBefore, dateBefore, idGroupsBefore));
+		}catch (SQLException e){
+			e.printStackTrace();
 		}
 	}
 }

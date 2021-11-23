@@ -12,19 +12,9 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import javax.swing.GroupLayout;
+import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SpinnerDateModel;
 import javax.swing.table.DefaultTableModel;
 
 import com.jgoodies.forms.factories.FormFactory;
@@ -37,8 +27,6 @@ import cu.edu.cujae.transportdb.dto.ModificationTypeDto;
 import cu.edu.cujae.transportdb.services.ModificationServices;
 import cu.edu.cujae.transportdb.services.ModificationTypeServices;
 import cu.edu.cujae.transportdb.services.ServicesLocator;
-
-import javax.swing.JComboBox;
 
 public class TablaModificacion extends JDialog {
 	private JButton btnNewButton;
@@ -53,9 +41,17 @@ public class TablaModificacion extends JDialog {
 	private JComboBox comboBox;
 	private JLabel lblNewLabel;
 	private JTextField textField;
+	private JLabel lblGruop;
+	private JSpinner spinner_1;
 
 	private final Object[] row= new Object[6];
-	private final DefaultTableModel model = new DefaultTableModel();
+	private final DefaultTableModel model = new DefaultTableModel(){
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			//all cells false
+			return false;
+		}
+	};
 	private ModificationServices ms = ServicesLocator.getModificationServices();
 	private LinkedList<ModificationDto> modifications;
 	private LinkedList<ModificationTypeDto> modificationTypes;
@@ -71,7 +67,7 @@ public class TablaModificacion extends JDialog {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		setTitle("Modificacion del Grupo");
+		setTitle("Modificación");
 		setBounds(100, 100, 665, 445);
 		setModal(true);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
@@ -95,15 +91,15 @@ public class TablaModificacion extends JDialog {
 				
 				table = new JTable();
 				
-				Object[] columns = {"Fecha", "Tipo de modificacion", "Nuevo valor", "Grupo"};
+				Object[] columns = {"Fecha", "Tipo de modificación", "Nuevo valor", "Grupo"};
 				
 				model.setColumnIdentifiers(columns);
-				table.setToolTipText("aaaaaaaaa");
+				table.setToolTipText("");
 				table.setFont(new Font("Times New Roman", Font.BOLD, 16));
 				table.setBackground(Color.white);
 				table.setForeground(Color.black);
-				table.setSelectionBackground(Color.red);
-				table.setGridColor(Color.red);
+				table.setSelectionBackground(Color.lightGray);
+				table.setGridColor(Color.black);
 				table.setRowHeight(30);
 				table.setAutoCreateRowSorter(true);
 				table.setModel(model);
@@ -187,6 +183,15 @@ public class TablaModificacion extends JDialog {
 				textField = new JTextField();
 				panel.add(textField, "5, 4, fill, default");
 				textField.setColumns(10);
+			}
+			{
+				lblGruop = new JLabel("Grupo");
+				panel.add(lblGruop, "7, 4");
+			}
+			{
+				spinner_1 = new JSpinner();
+				spinner_1.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+				panel.add(spinner_1, "10, 4");
 			}
 		}
 		///////
@@ -299,7 +304,7 @@ public class TablaModificacion extends JDialog {
 		Date dateAfter = new Date(((java.util.Date)spinner.getValue()).getTime());
 		String modificationType = comboBox.getSelectedItem().toString();
 		String newValue = textField.getText().toString();
-		int idGroups = 1;
+		int idGroups = (int) spinner_1.getValue();
 
 		//insert gui
 		row[0] = dateAfter;
@@ -332,7 +337,7 @@ public class TablaModificacion extends JDialog {
 			Date dateAfter = new Date(((java.util.Date)spinner.getValue()).getTime());
 			String modificationTypeAfter = comboBox.getSelectedItem().toString();
 			String newValueAfter = textField.getText().toString();
-			int idGroupsAfter = 1;
+			int idGroupsAfter = (int) spinner_1.getValue();
 
 			//change info in gui
 			model.setValueAt(dateAfter, rowNumber, 0);

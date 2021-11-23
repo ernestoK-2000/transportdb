@@ -1,18 +1,19 @@
 package cu.edu.cujae.transportdb.dto;
 
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 
 public class ProgrammingDto {
-    private Date startTime;
-    private Date endTime;
+    private Time startTime;
+    private Time endTime;
     private String pickUpPlace;
     private final int idProgramming;
     private int idProgrammingType;
     private int idApplication;
     private int idModification;
 
-    public ProgrammingDto(Date startTime, Date endTime, String pickUpPlace, int idProgramming, int idProgrammingType, int idApplication, int idModification) {
+    public ProgrammingDto(Time startTime, Time endTime, String pickUpPlace, int idProgramming, int idProgrammingType, int idApplication, int idModification) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.pickUpPlace = pickUpPlace;
@@ -22,19 +23,19 @@ public class ProgrammingDto {
         this.idModification = idModification;
     }
 
-    public Date getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public Time getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Time endTime) {
         this.endTime = endTime;
     }
 

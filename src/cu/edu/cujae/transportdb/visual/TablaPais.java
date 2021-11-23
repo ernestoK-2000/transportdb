@@ -49,7 +49,13 @@ public class TablaPais extends JDialog {
 	private JScrollPane scrollPane;
 
 	private final Object[] row = new Object[6];
-	private final DefaultTableModel model = new DefaultTableModel();
+	private final DefaultTableModel model = new DefaultTableModel(){
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			//all cells false
+			return false;
+		}
+	};
 	private CountryServices cs = ServicesLocator.getCountryServices();
 
 	/**
@@ -84,12 +90,12 @@ public class TablaPais extends JDialog {
 				Object[] columns = {"Paises"};
 				
 				model.setColumnIdentifiers(columns);
-				table.setToolTipText("aaaaaaaaa");
+				table.setToolTipText("");
 				table.setFont(new Font("Times New Roman", Font.BOLD, 16));
 				table.setBackground(Color.white);
 				table.setForeground(Color.black);
-				table.setSelectionBackground(Color.red);
-				table.setGridColor(Color.red);
+				table.setSelectionBackground(Color.lightGray);
+				table.setGridColor(Color.black);
 				table.setRowHeight(30);
 				table.setAutoCreateRowSorter(true);
 				table.setModel(model);

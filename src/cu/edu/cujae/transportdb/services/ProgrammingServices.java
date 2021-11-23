@@ -3,10 +3,7 @@ package cu.edu.cujae.transportdb.services;
 import cu.edu.cujae.transportdb.dto.CountryDto;
 import cu.edu.cujae.transportdb.dto.ProgrammingDto;
 
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Time;
+import java.sql.*;
 
 public class ProgrammingServices extends AbstractServices<ProgrammingDto> {
 
@@ -16,8 +13,8 @@ public class ProgrammingServices extends AbstractServices<ProgrammingDto> {
 
     @Override
     protected ProgrammingDto createDto(ResultSet resultSet) throws SQLException {
-        return new ProgrammingDto(resultSet.getDate(2),
-                resultSet.getDate(3),
+        return new ProgrammingDto(resultSet.getTime(2),
+                resultSet.getTime(3),
                 resultSet.getString(4),
                 resultSet.getInt(1),
                 resultSet.getInt(5),
@@ -30,7 +27,7 @@ public class ProgrammingServices extends AbstractServices<ProgrammingDto> {
         java.sql.Connection connection = ServicesLocator.getConnection();
 
         String sqlFunction = "{call " + tableName + "_insert(?, ?, ?, ?, ?, ?, ?)}";
-        connection.setAutoCommit(false);
+        //connection.setAutoCommit(false);
         CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
         preparedFunction.setInt(1, programmingDto.getIdProgramming());
         preparedFunction.setTime(2, (Time) programmingDto.getStartTime());
@@ -50,7 +47,7 @@ public class ProgrammingServices extends AbstractServices<ProgrammingDto> {
         java.sql.Connection connection = ServicesLocator.getConnection();
 
         String sqlFunction = "{call " + tableName + "_update(?, ?, ?, ?, ?, ?, ?)}";
-        connection.setAutoCommit(false);
+        //connection.setAutoCommit(false);
         CallableStatement preparedFunction = connection.prepareCall(sqlFunction);
         preparedFunction.setInt(1, programmingDto.getIdProgramming());
         preparedFunction.setTime(2, (Time) programmingDto.getStartTime());
@@ -63,5 +60,19 @@ public class ProgrammingServices extends AbstractServices<ProgrammingDto> {
 
         preparedFunction.close();
         connection.close();
+    }
+
+    public int getIdProgramming(Time startTime, Time endTime, String pickupPlace, int idApplication) throws SQLException{
+        java.sql.Connection connection = ServicesLocator.getConnection();
+        String sql = "select id_programming from programming where (start_time = ? and end_time = ? and pick_up_place = ? and id_application = ?)";
+        PreparedStatement statement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        statement.setTime(1, startTime);
+        statement.setTime(2, endTime);
+        statement.setString(3, pickupPlace);
+        statement.setInt(4, idApplication);
+        statement.execute();
+        ResultSet result = statement.getResultSet();
+        result.first();
+        return result.getInt(1);
     }
 }
